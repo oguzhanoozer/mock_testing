@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 abstract class IWeatherService {
   Future<Weather> fetchWeather(http.Client client);
+  Future<int> fetchWeatherId(http.Client client);
 }
 
 class WeatherService extends IWeatherService {
@@ -15,6 +16,17 @@ class WeatherService extends IWeatherService {
     final response = await client.get(Uri.parse(_url));
     if (response.statusCode == 200) {
       return Weather.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception("Failed to load post");
+    }
+  }
+
+  @override
+  Future<int> fetchWeatherId(http.Client client) async {
+    final response = await client.get(Uri.parse(_url));
+    if (response.statusCode == 200) {
+      var responseMap = Weather.fromJson(jsonDecode(response.body));
+      return responseMap.id ?? 0;
     } else {
       throw Exception("Failed to load post");
     }

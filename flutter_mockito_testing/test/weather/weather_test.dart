@@ -29,6 +29,19 @@ void main() {
       expect(_data, isA<Weather>());
     });
 
+    test("succeed in fetching id", () async {
+      final _url = 'https://jsonplaceholder.typicode.com/posts/1';
+
+      final _client = MockClient();
+
+      when(_client.get(Uri.parse(_url))).thenAnswer((_) async => http.Response(
+          '{"userId":1,"id":10,"title":"Ankara","body":"Capital City"}', 200));
+
+      final _data = await _weatherService.fetchWeatherId(_client);
+
+      expect(_data, 10);
+    });
+
     test("Failed to fetching data", () {
       final _url = 'https://jsonplaceholder.typicode.com/posts/1';
 
